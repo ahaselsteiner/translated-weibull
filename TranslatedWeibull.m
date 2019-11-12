@@ -37,11 +37,12 @@ classdef TranslatedWeibull < handle
       end
       
       function f = pdf(this, x, alpha, beta, gamma)
-          pdf = @(x, alpha, beta, gamma) beta ./ alpha .* ((x - gamma) ./ ...
+          pdf = @(x, alpha, beta, gamma) (x > gamma) * ... % ensures that f(x<gamma) = 0.
+              beta ./ alpha .* ((x - gamma) ./ ...
               alpha).^(beta - 1) .* exp(-1 .* ((x - gamma) ./ alpha).^beta);
       
           if nargin < 3
-              f = pdf(x, this.Alpha, this.Beta, this.gamma);
+              f = pdf(x, this.Alpha, this.Beta, this.Gamma);
           else
               f = pdf(x, alpha, beta, gamma);
           end

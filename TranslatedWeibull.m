@@ -50,7 +50,8 @@ classdef TranslatedWeibull < handle
       
       function F = cdf(this, x)
           % Cumulative distribution function.
-          F =  1 - exp(-1 .* ((x - this.Gamma) / this.Alpha).^this.Beta);
+          F = (x > this.Gamma) * ... % ensures that F(x<gamma) = 0.
+              (1 - exp(-1 .* ((x - this.Gamma) / this.Alpha).^this.Beta));
       end
       
       function x = icdf(this, p)

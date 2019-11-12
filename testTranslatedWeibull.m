@@ -3,7 +3,7 @@ pdTrue = TranslatedWeibull(2.776, 1.471, 0.8888);
 x = [0:0.01:18];
 f = pdTrue.pdf(x);
 
-fig1 = figure('position', [100 100 450 280])
+fig1 = figure('position', [100 100 450 280]);
 plot(x, f);
 message = sprintf(['In Vanem and Bitner-Gregersen (2012), Fig. 14 \n' ...
      '(doi: 10.1016/j.apor.2012.05.006) \n' ...
@@ -31,7 +31,7 @@ for i = 1:nOfSamples
     gammaEstimated(i) = pdEstimated(i).Gamma;
 end
 
-fig2 = figure('position', [100 100 400, 130]);
+fig2 = figure('position', [100 100 500, 230]);
 subplot(1, 3, 1)
 hold on
 plot([0.5 1.5], [1 1], '-k')
@@ -64,3 +64,4 @@ text(1.15, 2, [num2str(mean(gammaEstimated), '%1.3f') '+-' ...
     num2str(std(gammaEstimated), '%1.3f')], 'fontsize', 8, ...
     'verticalalignment', 'bottom'); 
 box off
+suptitle('Parameter estimation');

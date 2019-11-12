@@ -34,7 +34,7 @@ end
 fig2 = figure('position', [100 100 500, 230]);
 subplot(1, 3, 1)
 hold on
-plot([0.5 1.5], [1 1], '-k')
+plot([0.5 1.5], [2.776 2.776], '-k')
 boxplot(alphaEstimated, {'$$\hat{\alpha}$$'})
 bp = gca;
 bp.XAxis.TickLabelInterpreter = 'latex';
@@ -45,7 +45,7 @@ box off
 
 subplot(1, 3, 2)
 hold on
-plot([0.5 1.5], [1 1], '-k')
+plot([0.5 1.5], [1.471 1.471], '-k')
 boxplot(betaEstimated, {'$$\hat{\beta}$$'})
 bp = gca;
 bp.XAxis.TickLabelInterpreter = 'latex';
@@ -56,7 +56,7 @@ box off
 
 subplot(1, 3, 3)
 hold on
-plot([0.5 1.5], [2 2], '-k')
+plot([0.5 1.5], [0.8888 0.8888], '-k')
 boxplot(gammaEstimated, {'$$\hat{\gamma}$$'})
 bp = gca;
 bp.XAxis.TickLabelInterpreter = 'latex';

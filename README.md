@@ -1,1 +1,1 @@
-# translated-weibull
+# Translated Weibull distribution

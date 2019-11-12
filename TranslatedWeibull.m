@@ -57,6 +57,14 @@ classdef TranslatedWeibull < handle
           x = wblinv(p, this.Alpha, this.Beta) + this.Gamma;
       end
       
+      function x = drawSample(this, n)
+          if n < 2
+              n = 1;
+          end
+          p = rand(n, 1);
+          x = this.icdf(p);
+      end
+      
       function val = negativeloglikelihood(this, x)
           % Negative log-likelihood value (as a metric of goodness of fit).
           val = sum(-log(pdf(x, this.Alpha, this.Beta, this.Gamma)));

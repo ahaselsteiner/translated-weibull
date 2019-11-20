@@ -20,6 +20,7 @@ nOfSamples = 20;
 alphaEstimated = nan(nOfSamples, 1);
 betaEstimated = nan(nOfSamples, 1);
 gammaEstimated = nan(nOfSamples, 1);
+pdEstimated = TranslatedWeibull.empty(nOfSamples, 0);
 for i = 1:nOfSamples
     sample = pdTrue.drawSample(n);
     pdEstimated(i) = TranslatedWeibull();
@@ -36,7 +37,7 @@ plot([0.5 1.5], [2.776 2.776], '-k')
 boxplot(alphaEstimated, {'$$\hat{\alpha}$$'})
 bp = gca;
 bp.XAxis.TickLabelInterpreter = 'latex';
-text(1.15, 1, [num2str(mean(alphaEstimated), '%1.3f') '+-' ...
+text(1.15, pdTrue.Alpha, [num2str(mean(alphaEstimated), '%1.3f') '+-' ...
     num2str(std(alphaEstimated), '%1.3f')], 'fontsize', 8, ...
     'verticalalignment', 'bottom'); 
 box off
@@ -47,7 +48,7 @@ plot([0.5 1.5], [1.471 1.471], '-k')
 boxplot(betaEstimated, {'$$\hat{\beta}$$'})
 bp = gca;
 bp.XAxis.TickLabelInterpreter = 'latex';
-text(1.15, 1, [num2str(mean(betaEstimated), '%1.3f') '+-' ...
+text(1.15, pdTrue.Beta, [num2str(mean(betaEstimated), '%1.3f') '+-' ...
     num2str(std(betaEstimated), '%1.3f')], 'fontsize', 8, ...
     'verticalalignment', 'bottom');
 box off
@@ -58,8 +59,9 @@ plot([0.5 1.5], [0.8888 0.8888], '-k')
 boxplot(gammaEstimated, {'$$\hat{\gamma}$$'})
 bp = gca;
 bp.XAxis.TickLabelInterpreter = 'latex';
-text(1.15, 2, [num2str(mean(gammaEstimated), '%1.3f') '+-' ...
+text(1.15, pdTrue.Gamma, [num2str(mean(gammaEstimated), '%1.3f') '+-' ...
     num2str(std(gammaEstimated), '%1.3f')], 'fontsize', 8, ...
     'verticalalignment', 'bottom'); 
 box off
-suptitle('Parameter estimation');
+suptitle(['Parameter estimation, true parameters: ' ...
+    num2str(pdTrue.Alpha) ', ' num2str(pdTrue.Beta) ', ' num2str(pdTrue.Gamma)]);

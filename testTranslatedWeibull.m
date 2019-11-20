@@ -1,8 +1,7 @@
+% Test #1: Does the implementation reproduce results from the literature? 
 pdTrue = TranslatedWeibull(2.776, 1.471, 0.8888);
-
 x = [0:0.01:18];
 f = pdTrue.pdf(x);
-
 fig1 = figure('position', [100 100 450 280]);
 plot(x, f);
 message = sprintf(['In Vanem and Bitner-Gregersen (2012), Fig. 14 \n' ...
@@ -15,10 +14,9 @@ xlabel('Significant wave height (m)');
 ylim([0 0.4]);
 box off
 
-
+% Test #2: Does the parameter estimation work correctly?
 n = 1000;
 nOfSamples = 20;
-
 alphaEstimated = nan(nOfSamples, 1);
 betaEstimated = nan(nOfSamples, 1);
 gammaEstimated = nan(nOfSamples, 1);

@@ -23,7 +23,7 @@ classdef TranslatedWeibull < handle
       end
       
       function parmHat = fitDist(this, sample)
-          % Estimate the parameters of the distribution using maximum 
+          % Estimates the parameters of the distribution using maximum 
           % likelihood estimation.
           epsilon = 0.99999;
           max_location_param = epsilon * min(sample);
@@ -39,7 +39,7 @@ classdef TranslatedWeibull < handle
       end
       
       function [parmHat, pStd, pCi] = fitDistAndBootstrap(this, sample, B, alpha)
-          % Estimate the parameters of the distribution using maximum 
+          % Estimates the parameters of the distribution using maximum 
           % likelihood estimation and estimate the parameters' uncertainty
           % using bootstrapping.
           %

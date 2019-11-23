@@ -1,3 +1,5 @@
+% This software was written for the publication XXX. 
+
 classdef TranslatedWeibull < handle
 % The translated Weibull distribution, sometimes also simply called 
 % "3-parameter Weibull distribution" is a parametric probability
@@ -34,6 +36,48 @@ classdef TranslatedWeibull < handle
           this.Alpha = parmHat(1);
           this.Beta = parmHat(2);
           this.Gamma = parmHat(3);
+      end
+      
+      function [parmHat, pStd, pCi] = fitDistAndBootstrap(this, sample, B, alpha)
+          % Estimate the parameters of the distribution using maximum 
+          % likelihood estimation and estimate the parameters' uncertainty
+          % using bootstrapping.
+          %
+          % For bootstrapping, see, for example, "An introduction to the
+          % bootstrap" by B. Efron and R. J. Tibshirani (1993).
+          if nargin < 4
+              alpha = 0.05;
+          end
+          parmHat = this.fitDist(sample);
+          bAlphas = nan(B, 1);
+          bBetas = nan(B, 1);
+          bGammas = nan(B, 1);
+          for i = 1:B
+              bSample = datasample(sample, length(sample), 'replace', true);
+              bParmHat = this.fitDist(bSample);
+              bAlphas(i) = bParmHat(1);
+              bBetas(i) = bParmHat(2);
+              bGammas(i) = bParmHat(3);
+          end
+          bAlphas = sort(bAlphas);
+          bBetas = sort(bBetas);
+          bGammas = sort(bGammas);
+          
+          % The index of the interval is chosen as in Efron and Tibshirani
+          % (1993), p. 160.
+          iLower = floor((B + 1) * (alpha / 2));
+          iUpper = B + 1 - iLower;
+          
+          % Compute the estimators' standard deviations, see Eq. 2.3 in 
+          % Efron and Tibshirani (1993).
+          pStd = [std(bAlphas), std(bBetas), std(bGammas)];
+          
+          % Compute the 1 - alpha intervals based on bootstrap percentiles 
+          % (see Efron and Tibshirani (1993), pp. 168). 
+          pCi = ...
+              [bAlphas(iLower), bBetas(iLower), bGammas(iLower);
+               bAlphas(iUpper), bBetas(iUpper), bGammas(iUpper)];
+          
       end
       
       function f = pdf(this, x, alpha, beta, gamma)

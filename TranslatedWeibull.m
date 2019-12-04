@@ -1,4 +1,7 @@
-% This software was written for the publication XXX. 
+% This software was written for the publication
+% "Predicting wave heights for marine design by prioritizing extreme 
+% events in a global model" by A.F. Haselsteiner and K-D. Thoben, see
+% https://arxiv.org/pdf/1911.12835.pdf .
 
 classdef TranslatedWeibull < handle
 % The translated Weibull distribution, sometimes also simply called 
@@ -8,9 +11,12 @@ classdef TranslatedWeibull < handle
 % We use the parameterization and variables names that are also used in 
 % doi.org/10.1016/j.coastaleng.2017.03.002 .
    properties
-      Alpha
-      Beta
-      Gamma
+      Alpha % Scale parameter.
+      Beta % Shape parameter.
+      Gamma % Location parameter.
+      BootstrapParm % Parameters estimated using bootstrap.
+      ParameterSE % Parameters' standard error estimated using bootstrapping.
+      ParameterCI % Parameters'confidence interval standard error estimated using bootstrapping.
    end
    
    methods
@@ -48,7 +54,6 @@ classdef TranslatedWeibull < handle
           if nargin < 4
               alpha = 0.05;
           end
-          parmHat = this.fitDist(sample);
           bAlphas = nan(B, 1);
           bBetas = nan(B, 1);
           bGammas = nan(B, 1);
@@ -59,9 +64,6 @@ classdef TranslatedWeibull < handle
               bBetas(i) = bParmHat(2);
               bGammas(i) = bParmHat(3);
           end
-          bAlphas = sort(bAlphas);
-          bBetas = sort(bBetas);
-          bGammas = sort(bGammas);
           
           % The index of the interval is chosen as in Efron and Tibshirani
           % (1993), p. 160.
@@ -74,10 +76,17 @@ classdef TranslatedWeibull < handle
           
           % Compute the 1 - alpha intervals based on bootstrap percentiles 
           % (see Efron and Tibshirani (1993), pp. 168). 
+          sortedAlphas = sort(bAlphas);
+          sortedBetas = sort(bBetas);
+          sortedGammas = sort(bGammas);
           pCi = ...
-              [bAlphas(iLower), bBetas(iLower), bGammas(iLower);
-               bAlphas(iUpper), bBetas(iUpper), bGammas(iUpper)];
+              [sortedAlphas(iLower), sortedBetas(iLower), sortedGammas(iLower);
+               sortedAlphas(iUpper), sortedBetas(iUpper), sortedGammas(iUpper)];
           
+          parmHat = this.fitDist(sample); % Calling fitDist also sets the class' parameters.
+          this.BootstrapParm = [bAlphas, bBetas, bGammas];
+          this.ParameterSE = pStd;
+          this.ParameterCI = pCi;
       end
       
       function f = pdf(this, x, alpha, beta, gamma)
